@@ -2,8 +2,6 @@
 
 	<form class="p-5 bg-light" method="post">
 
-		
-
 		<div class="form-group">
 
 			<label for="email">Correo electrónico:</label>
@@ -41,15 +39,8 @@
 
 		<?php 
 
-		/*=============================================
-		FORMA EN QUE SE INSTANCIA LA CLASE DE UN MÉTODO NO ESTÁTICO 
-		=============================================*/
-		
 		$ingreso = new ControladorFormularios();
 		$ingreso -> ctrIngreso();
-
-	
-		
 
 		?>
 		

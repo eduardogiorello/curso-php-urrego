@@ -1,82 +1,127 @@
 <?php
-if (isset($_GET['id'])) {
-    $item = 'id';
-    $valor = $_GET['id'];
 
-    $usuario = ControladorFormularios::ctrSeleccionarRegistros($item, $valor);
+if(isset($_GET["token"])){
+
+	$item = "token";
+	$valor = $_GET["token"];
+
+	$usuario = ControladorFormularios::ctrSeleccionarRegistros($item, $valor);
+
 }
-
-
 
 ?>
 
+
 <div class="d-flex justify-content-center text-center">
 
-    <form class="p-5 bg-light" method="post">
+	<form class="p-5 bg-light" method="post">
 
-        <div class="form-group">
-            <label for="nombre">Nombre:</label>
+		<div class="form-group">
 
-            <div class="input-group">
+			<div class="input-group">
+				
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-user"></i>
+					</span>
+				</div>
 
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fas fa-user"></i>
-                    </span>
-                </div>
+				<input type="text" class="form-control" value="<?php echo $usuario["nombre"]; ?>" placeholder="Escriba su nombre" id="nombre" name="actualizarNombre">
 
-                <input type="text" class="form-control" id="nombre" value="<?= $usuario['nombre']; ?>" name="actualizarNombre">
+			</div>
+			
+		</div>
 
-            </div>
+		<div class="form-group">
 
-        </div>
+			<div class="input-group">
+				
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-envelope"></i>
+					</span>
+				</div>
 
-        <div class="form-group">
+				<input type="email" class="form-control" value="<?php echo $usuario["email"]; ?>" placeholder="Escriba su email" id="email" name="actualizarEmail">
+			
+			</div>
+			
+		</div>
 
-            <label for="email">Correo electrónico:</label>
+		<div class="form-group">
 
-            <div class="input-group">
+			<div class="input-group">
+				
+				<div class="input-group-prepend">
+					<span class="input-group-text">
+						<i class="fas fa-lock"></i>
+					</span>
+				</div>
 
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fas fa-envelope"></i>
-                    </span>
-                </div>
+				<input type="password" class="form-control" placeholder="Escriba su contraseña" id="pwd" name="actualizarPassword">
 
-                <input type="email" class="form-control" id="email" value="<?= $usuario['email']; ?>" name="actualizarEmail">
+				<input type="hidden" name="passwordActual" value="<?php echo $usuario["password"]; ?>">
+				<input type="hidden" name="tokenUsuario" value="<?php echo $usuario["token"]; ?>">
+					<input type="hidden" name="idUsuario" value="<?php echo $usuario["id"]; ?>">
 
-            </div>
+			</div>
 
-        </div>
+		</div>
 
-        <div class="form-group">
-            <label for="pwd">Contraseña:</label>
+		<?php
 
-            <div class="input-group">
+		$actualizar = ControladorFormularios::ctrActualizarRegistro();
 
-                <div class="input-group-prepend">
-                    <span class="input-group-text">
-                        <i class="fas fa-lock"></i>
-                    </span>
-                </div>
+		if($actualizar == "ok"){
 
-                <input type="password" class="form-control" id="pwd" name="actualizarPassword">
-                <input type="hidden" name="passwordActual" value="<?= $usuario['password']; ?>">
-                <input type="hidden" name="idUsuario" value="<?= $usuario['id']; ?>">
-            </div>
+			echo '<script>
 
-        </div>
+			if ( window.history.replaceState ) {
 
-        <?php
+				window.history.replaceState( null, null, window.location.href );
+
+			}
+
+			</script>';
+
+			echo '<div class="alert alert-success">El usuario ha sido actualizado</div>
 
 
-        $actualizar = new ControladorFormularios();
-        $actualizar->ctrActualizarRegistro();
+			<script>
 
-        ?>
+				setTimeout(function(){
+				
+					window.location = "index.php?pagina=inicio";
 
-        <button type="submit" class="btn btn-primary">Actualizar</button>
+				},3000);
 
-    </form>
+			</script>
+
+			';
+
+		}
+
+		if($actualizar == "error"){
+
+			echo '<script>
+
+			if ( window.history.replaceState ) {
+
+				window.history.replaceState( null, null, window.location.href );
+
+			}
+
+			</script>';
+
+			echo '<div class="alert alert-danger">Error al actualizar el usuario</div>';
+
+		}
+
+
+		?>
+		
+		<button type="submit" class="btn btn-primary">Actualizar</button>
+
+	</form>
 
 </div>

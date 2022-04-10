@@ -1,25 +1,27 @@
 <?php
 
-/*compruevo si esta logeado*/
+if(!isset($_SESSION["validarIngreso"])){
 
-if (!isset($_SESSION['login'])) {
+	echo '<script>window.location = "ingreso";</script>';
 
-	echo '<script> window.location = "index.php?pagina=ingreso ";</script>';
 	return;
-} else {
 
-	if ($_SESSION['login'] != 'ok') {
-		echo '<script> window.location = "index.php?pagina=ingreso ";</script>';
+}else{
+
+	if($_SESSION["validarIngreso"] != "ok"){
+
+		echo '<script>window.location = "ingreso";</script>';
+
 		return;
 	}
+	
 }
 
-/* Llamado al controlador */
 $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null, null);
 
 
-
 ?>
+
 
 
 <table class="table table-striped">
@@ -32,27 +34,49 @@ $usuarios = ControladorFormularios::ctrSeleccionarRegistros(null, null);
 			<th>Acciones</th>
 		</tr>
 	</thead>
+
 	<tbody>
 
-		<?php foreach ($usuarios as $key => $value) : ?>
-			<tr>
-				<td><?= ($key + 1); ?></td>
-				<td><?= $value['nombre']; ?></td>
-				<td><?= $value['email']; ?></td>
-				<td><?= $value['fecha']; ?></td>
-				<td>
+	<?php foreach ($usuarios as $key => $value): ?>
 
-					<div class="btn-group">
-						<a href="index.php?pagina=editar&id=<?= $value['id']; ?>" class="btn btn-warning"><i class="fa-solid fa-pencil"></i></a>
-						&nbsp;
-						<button class="btn btn-danger"><i class="fa-solid fa-trash-can"></i></button>
-					</div>
+		<tr>
+			<td><?php echo ($key+1); ?></td>
+			<td><?php echo $value["nombre"]; ?></td>
+			<td><?php echo $value["email"]; ?></td>
+			<td><?php echo $value["fecha"]; ?></td>
+			<td>
 
-				</td>
-			</tr>
-		<?php endforeach ?>
+			<div class="btn-group">
 
+				<div class="px-1">
+				
+				<a href="index.php?pagina=editar&token=<?php echo $value["token"]; ?>" class="btn btn-warning"><i class="fas fa-pencil-alt"></i></a>
 
+				</div>
 
+				<form method="post">
+
+					<input type="hidden" value="<?php echo $value["token"]; ?>" name="eliminarRegistro">
+					
+					<button type="submit" class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+
+					<?php
+
+						$eliminar = new ControladorFormularios();
+						$eliminar -> ctrEliminarRegistro();
+
+					?>
+
+				</form>			
+
+			</div>
+				
+
+			</td>
+		</tr>
+		
+	<?php endforeach ?>	
+	
 	</tbody>
+	
 </table>
